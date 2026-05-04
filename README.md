@@ -18,7 +18,7 @@ Year   : [################..................................] 33%
 
 1. Clone into your plugins directory:
    ```bash
-   git clone https://github.com/Jahamars/tempo.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/tempo
+   git clone https://github.com/j4hongir/tempo.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/tempo
    ```
 2. Add `tempo` to your `plugins` array in `.zshrc`:
    ```zsh
@@ -31,7 +31,7 @@ Year   : [################..................................] 33%
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/Jahamars/tempo.git ~/tempo
+   git clone https://github.com/j4hongir/tempo.git ~/tempo
    ```
 2. Add to your `.zshrc`:
    ```zsh
@@ -48,7 +48,7 @@ Year   : [################..................................] 33%
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/Jahamars/tempo.git ~/tempo
+   git clone https://github.com/j4hongir/tempo.git ~/tempo
    ```
 2. Add to your `.bashrc`:
    ```bash
@@ -64,7 +64,7 @@ Year   : [################..................................] 33%
 <summary><strong>Fisher</strong></summary>
 
 ```fish
-fisher install Jahamars/tempo
+fisher install j4hongir/tempo
 ```
 </details>
 
@@ -73,7 +73,7 @@ fisher install Jahamars/tempo
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/Jahamars/tempo.git ~/tempo
+   git clone https://github.com/j4hongir/tempo.git ~/tempo
    ```
 2. Symlink the Fish files:
    ```fish
