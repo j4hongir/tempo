@@ -112,6 +112,7 @@ set -g TEMPO_WIDTH 50
 set -g TEMPO_SHOW_ITEMS "day week"
 set -g TEMPO_FILLED_CHAR "#"
 set -g TEMPO_EMPTY_CHAR "."
+tempo
 ```
 
 ## usage
