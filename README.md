@@ -1,6 +1,6 @@
-# Tempo
+# tempo
 
-> A minimalist time progress tracker for your shell — supports **Zsh**, **Bash**, and **Fish**.
+> A minimalist time progress tracker for your shell (zsh bash fish)
 
 ```
 Day    : [################..................................] 33%                             
@@ -9,31 +9,31 @@ Month  : [#####.............................................] 10%
 Year   : [################..................................] 33%
 ```
 
-## Installation
+## installation
 
-### Zsh
+### zsh
 
 <details>
 <summary><strong>Oh My Zsh</strong></summary>
 
-1. Clone into your plugins directory:
+1. clone into your plugins directory:
    ```bash
    git clone https://github.com/j4hongir/tempo.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/tempo
    ```
-2. Add `tempo` to your `plugins` array in `.zshrc`:
+2. add `tempo` to your `plugins` array in `.zshrc`:
    ```zsh
    plugins=(... tempo)
    ```
 </details>
 
 <details>
-<summary><strong>Manual (Zsh)</strong></summary>
+<summary><strong>manual</strong></summary>
 
-1. Clone the repo:
+1. clone the repo:
    ```bash
    git clone https://github.com/j4hongir/tempo.git ~/tempo
    ```
-2. Add to your `.zshrc`:
+2. add to your `.zshrc`:
    ```zsh
    source ~/tempo/tempo.plugin.zsh
    ```
@@ -41,16 +41,16 @@ Year   : [################..................................] 33%
 
 ---
 
-### Bash
+### bash
 
 <details>
-<summary><strong>Manual (Bash)</strong></summary>
+<summary><strong>manual</strong></summary>
 
-1. Clone the repo:
+1. clone the repo:
    ```bash
    git clone https://github.com/j4hongir/tempo.git ~/tempo
    ```
-2. Add to your `.bashrc`:
+2. add to your `.bashrc`:
    ```bash
    source ~/tempo/tempo.bash
    ```
@@ -58,10 +58,10 @@ Year   : [################..................................] 33%
 
 ---
 
-### Fish
+### fish
 
 <details>
-<summary><strong>Fisher</strong></summary>
+<summary><strong>fisher</strong></summary>
 
 ```fish
 fisher install j4hongir/tempo
@@ -69,13 +69,13 @@ fisher install j4hongir/tempo
 </details>
 
 <details>
-<summary><strong>Manual (Fish)</strong></summary>
+<summary><strong>manual</strong></summary>
 
-1. Clone the repo:
+1. clone the repo:
    ```bash
    git clone https://github.com/j4hongir/tempo.git ~/tempo
    ```
-2. Symlink the Fish files:
+2. symlink the Fish files:
    ```fish
    ln -s ~/tempo/functions/tempo.fish ~/.config/fish/functions/tempo.fish
    ln -s ~/tempo/completions/tempo.fish ~/.config/fish/completions/tempo.fish
@@ -83,11 +83,11 @@ fisher install j4hongir/tempo
    ```
 </details>
 
-## Configuration
+## configuration
 
-Customize Tempo by setting these variables in your shell config (`.zshrc`, `.bashrc`, or `config.fish`).
+customize **tempo** by setting these variables in your shell config (`.zshrc`, `.bashrc`, or `config.fish`).
 
-| Variable | Default | Description |
+| variable | default | description |
 | :--- | :--- | :--- |
 | `TEMPO_AUTO_SHOW` | `true` | Show progress bars on shell startup |
 | `TEMPO_SHOW_ITEMS` | `day week month year` | List of items to display |
@@ -96,9 +96,9 @@ Customize Tempo by setting these variables in your shell config (`.zshrc`, `.bas
 | `TEMPO_EMPTY_CHAR` | `░` | Character for the empty portion |
 | `TEMPO_COLOR_STYLE` | `true` | Enable progress-based coloring |
 
-### Example
+### example
 
-**Bash / Zsh** (`.bashrc` / `.zshrc`):
+**bash/zsh** (`.bashrc` / `.zshrc`):
 ```sh
 TEMPO_WIDTH=50
 TEMPO_SHOW_ITEMS="day week"
@@ -106,7 +106,7 @@ TEMPO_FILLED_CHAR="#"
 TEMPO_EMPTY_CHAR="."
 ```
 
-**Fish** (`config.fish`):
+**fish** (`config.fish`):
 ```fish
 set -g TEMPO_WIDTH 50
 set -g TEMPO_SHOW_ITEMS "day week"
@@ -114,20 +114,20 @@ set -g TEMPO_FILLED_CHAR "#"
 set -g TEMPO_EMPTY_CHAR "."
 ```
 
-## Usage
+## usage
 
-Run the `tempo` command manually at any time:
+run the `tempo` command manually at any time:
 
 ```
-tempo           # Show default items
-tempo --day     # Show only today's progress
-tempo --week    # Show only this week's progress
-tempo --month   # Show only this month's progress
-tempo --year    # Show only this year's progress
+tempo           # default items
+tempo --day     # only today's progress
+tempo --week    # only this week's progress
+tempo --month   # only this month's progress
+tempo --year    # only this year's progress
 tempo --config  # View current settings
 tempo --help    # Show all options
 ```
 
-## License
+## license
 
 [MIT](LICENSE)

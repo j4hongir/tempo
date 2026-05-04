@@ -22,25 +22,31 @@ function _tempo_draw
     set -l char_empty (_tempo_get_config TEMPO_EMPTY_CHAR "░")
     set -l use_color (_tempo_get_config TEMPO_COLOR_STYLE "true")
 
-    set -l percent (math "$val * 100 / $max")
+    set -l percent (math --scale=0 "$val * 100 / $max")
     test $percent -gt 100; and set percent 100
 
-    set -l filled (math "$width * $percent / 100")
-    set -l empty (math "$width - $filled")
+    set -l filled (math --scale=0 "$width * $percent / 100")
+    set -l empty (math --scale=0 "$width - $filled")
 
     set -l bar_filled ""
     set -l bar_empty ""
-    for i in (seq $filled)
-        set bar_filled "$bar_filled$char_filled"
+    if test $filled -gt 0
+        for i in (seq $filled)
+            set bar_filled "$bar_filled$char_filled"
+        end
     end
-    for i in (seq $empty)
-        set bar_empty "$bar_empty$char_empty"
+    if test $empty -gt 0
+        for i in (seq $empty)
+            set bar_empty "$bar_empty$char_empty"
+        end
     end
 
-    set -l pad_size (math "7 - "(string length $label))
+    set -l pad_size (math --scale=0 "7 - "(string length $label))
     set -l padding ""
-    for i in (seq $pad_size)
-        set padding "$padding "
+    if test $pad_size -gt 0
+        for i in (seq $pad_size)
+            set padding "$padding "
+        end
     end
 
     set -l color ""
@@ -66,7 +72,7 @@ function _tempo_seconds_today
     test -z "$h"; and set h 0
     test -z "$m"; and set m 0
     test -z "$s"; and set s 0
-    math "$h * 3600 + $m * 60 + $s"
+    math --scale=0 "$h * 3600 + $m * 60 + $s"
 end
 
 function _tempo_days_in_month
@@ -77,7 +83,7 @@ end
 
 function _tempo_is_leap_year
     set -l yr (date +%Y)
-    if test (math "$yr % 4") -eq 0; and begin; test (math "$yr % 100") -ne 0; or test (math "$yr % 400") -eq 0; end
+    if test (math --scale=0 "$yr % 4") -eq 0; and begin; test (math --scale=0 "$yr % 100") -ne 0; or test (math --scale=0 "$yr % 400") -eq 0; end
         echo 366
     else
         echo 365
@@ -91,7 +97,7 @@ end
 
 function _tempo_calc_week
     set -l dow (date +%u)
-    set -l curr (math "($dow - 1) * 86400 + "(_tempo_seconds_today))
+    set -l curr (math --scale=0 "($dow - 1) * 86400 + "(_tempo_seconds_today))
     _tempo_draw $curr 604800 "Week"
 end
 
@@ -99,16 +105,16 @@ function _tempo_calc_month
     set -l day (date +%d | string replace -r '^0' '')
     test -z "$day"; and set day 0
     set -l dim (_tempo_days_in_month)
-    set -l curr (math "($day - 1) * 86400 + "(_tempo_seconds_today))
-    _tempo_draw $curr (math "$dim * 86400") "Month"
+    set -l curr (math --scale=0 "($day - 1) * 86400 + "(_tempo_seconds_today))
+    _tempo_draw $curr (math --scale=0 "$dim * 86400") "Month"
 end
 
 function _tempo_calc_year
     set -l doy (date +%j | string replace -r '^0+' '')
     test -z "$doy"; and set doy 0
     set -l diy (_tempo_is_leap_year)
-    set -l curr (math "($doy - 1) * 86400 + "(_tempo_seconds_today))
-    _tempo_draw $curr (math "$diy * 86400") "Year"
+    set -l curr (math --scale=0 "($doy - 1) * 86400 + "(_tempo_seconds_today))
+    _tempo_draw $curr (math --scale=0 "$diy * 86400") "Year"
 end
 
 function tempo -d "Minimalist time progress tracker"
