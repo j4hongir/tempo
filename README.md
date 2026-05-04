@@ -54,18 +54,22 @@ echo 'source ~/tempo/tempo.bash' >> ~/.bashrc
 ### fish
 <details>
 <summary><strong>fisher</strong></summary>
+
 ```fish
 fisher install j4hongir/tempo
 ```
+
 </details>
 <details>
 <summary><strong>manual</strong></summary>
+
 ```bash
 git clone https://github.com/j4hongir/tempo.git ~/tempo
 ln -s ~/tempo/functions/tempo.fish ~/.config/fish/functions/tempo.fish
 ln -s ~/tempo/completions/tempo.fish ~/.config/fish/completions/tempo.fish
 ln -s ~/tempo/conf.d/tempo.fish ~/.config/fish/conf.d/tempo.fish
 ```
+
 </details>
 
 ## usage
