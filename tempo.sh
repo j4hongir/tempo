@@ -1,169 +1,70 @@
 #!/bin/sh
-
-_tempo_get_config() {
-    _var_name=$1
-    _default_val=$2
-    _legacy_name=$(printf '%s' "$_var_name" | sed 's/TEMPO_/TBT_/')
-
-    eval "_val=\"\${$_var_name}\""
-    if [ -z "$_val" ]; then
-        eval "_val=\"\${$_legacy_name}\""
-    fi
-
-    printf '%s' "${_val:-$_default_val}"
-}
-
-_tempo_draw() {
-    _val=$1
-    _max=$2
-    _label=$3
-
-    _width=$(_tempo_get_config TEMPO_WIDTH 40)
-    _char_filled=$(_tempo_get_config TEMPO_FILLED_CHAR "█")
-    _char_empty=$(_tempo_get_config TEMPO_EMPTY_CHAR "░")
-    _use_color=$(_tempo_get_config TEMPO_COLOR_STYLE "true")
-
-    _percent=$((_val * 100 / _max))
-    [ "$_percent" -gt 100 ] && _percent=100
-
-    _filled=$((_width * _percent / 100))
-    _empty=$((_width - _filled))
-
-    _bar_filled=""
-    _bar_empty=""
-    _i=0
-    while [ "$_i" -lt "$_filled" ]; do
-        _bar_filled="${_bar_filled}${_char_filled}"
-        _i=$((_i + 1))
-    done
-    _i=0
-    while [ "$_i" -lt "$_empty" ]; do
-        _bar_empty="${_bar_empty}${_char_empty}"
-        _i=$((_i + 1))
-    done
-
-    _pad_size=$((7 - ${#_label}))
-    _padding=""
-    _i=0
-    while [ "$_i" -lt "$_pad_size" ]; do
-        _padding="${_padding} "
-        _i=$((_i + 1))
-    done
-
-    _color=""
-    _reset=""
-    if [ "$_use_color" = "true" ]; then
-        _reset='\033[0m'
-        if [ "$_percent" -ge 90 ]; then
-            _color='\033[31m'  
-        elif [ "$_percent" -ge 70 ]; then
-            _color='\033[33m'  
-        else
-            _color='\033[34m'  
-        fi
-    fi
-
-    printf '%s%s: [%b%s%b%s] %d%%\n' \
-        "$_label" "$_padding" "$_color" "$_bar_filled" "$_reset" "$_bar_empty" "$_percent"
-}
-
-
-_tempo_seconds_today() {
-    _h=$(date +%H | sed 's/^0//')
-    _m=$(date +%M | sed 's/^0//')
-    _s=$(date +%S | sed 's/^0//')
-    : "${_h:=0}" "${_m:=0}" "${_s:=0}"
-    echo $((_h * 3600 + _m * 60 + _s))
-}
-
-_tempo_days_in_month() {
-    _ym=$(date +%Y-%m-01)
-    _dim=$(date -d "$_ym +1 month -1 day" +%d 2>/dev/null) || \
-    _dim=$(gdate -d "$_ym +1 month -1 day" +%d 2>/dev/null) || \
-    _dim=30
-    echo "$_dim" | sed 's/^0//'
-}
-
-_tempo_is_leap_year() {
-    _yr=$(date +%Y)
-    if [ $((_yr % 4)) -eq 0 ] && { [ $((_yr % 100)) -ne 0 ] || [ $((_yr % 400)) -eq 0 ]; }; then
-        echo 366
-    else
-        echo 365
-    fi
-}
-
-_tempo_calc_day() {
-    _curr=$(_tempo_seconds_today)
-    _tempo_draw "$_curr" 86400 "Day"
-}
-
-_tempo_calc_week() {
-    _dow=$(date +%u)
-    _curr=$(( (_dow - 1) * 86400 + $(_tempo_seconds_today) ))
-    _tempo_draw "$_curr" 604800 "Week"
-}
-
-_tempo_calc_month() {
-    _day=$(date +%d | sed 's/^0//')
-    : "${_day:=0}"
-    _dim=$(_tempo_days_in_month)
-    _curr=$(( (_day - 1) * 86400 + $(_tempo_seconds_today) ))
-    _tempo_draw "$_curr" $((_dim * 86400)) "Month"
-}
-
-_tempo_calc_year() {
-    _doy=$(date +%j | sed 's/^0*//')
-    : "${_doy:=0}"
-    _diy=$(_tempo_is_leap_year)
-    _curr=$(( (_doy - 1) * 86400 + $(_tempo_seconds_today) ))
-    _tempo_draw "$_curr" $((_diy * 86400)) "Year"
-}
-
 tempo() {
-    _items=$(_tempo_get_config TEMPO_SHOW_ITEMS "day week month year")
+    _tw=${TEMPO_WIDTH:-40}
+    _tf=${TEMPO_FILLED:-#}
+    _te=${TEMPO_EMPTY:-.}
+    _tc=${TEMPO_COLOR:-true}
+    _ti=${TEMPO_ITEMS:-"day week month year"}
 
-    if [ $# -eq 0 ]; then
-        for _item in $_items; do
-            case $_item in
-                day|daily)     _tempo_calc_day   ;;
-                week|weekly)   _tempo_calc_week  ;;
-                month|monthly) _tempo_calc_month ;;
-                year|yearly)   _tempo_calc_year  ;;
-            esac
-        done
-        return
-    fi
-
-    case "$1" in
-        -d|--day)    _tempo_calc_day   ;;
-        -w|--week)   _tempo_calc_week  ;;
-        -m|--month)  _tempo_calc_month ;;
-        -y|--year)   _tempo_calc_year  ;;
+    case "${1:-}" in
+        -d|--day)    _ti=day ;;
+        -w|--week)   _ti=week ;;
+        -m|--month)  _ti=month ;;
+        -y|--year)   _ti=year ;;
+        -a|--all)    _ti="day week month year" ;;
         -c|--config)
             echo "Tempo Configuration:"
-            echo "  TEMPO_AUTO_SHOW   = $(_tempo_get_config TEMPO_AUTO_SHOW true)"
-            echo "  TEMPO_WIDTH       = $(_tempo_get_config TEMPO_WIDTH 40)"
-            echo "  TEMPO_SHOW_ITEMS  = $(_tempo_get_config TEMPO_SHOW_ITEMS 'day week month year')"
-            echo "  TEMPO_FILLED_CHAR = $(_tempo_get_config TEMPO_FILLED_CHAR '█')"
-            echo "  TEMPO_EMPTY_CHAR  = $(_tempo_get_config TEMPO_EMPTY_CHAR '░')"
-            echo "  TEMPO_COLOR_STYLE = $(_tempo_get_config TEMPO_COLOR_STYLE true)"
-            ;;
+            echo "  TEMPO_WIDTH  = $_tw"
+            echo "  TEMPO_FILLED = $_tf"
+            echo "  TEMPO_EMPTY  = $_te"
+            echo "  TEMPO_COLOR  = $_tc"
+            echo "  TEMPO_ITEMS  = $_ti"
+            echo "  TEMPO_AUTO   = ${TEMPO_AUTO:-true}"
+            return ;;
         -h|--help)
             echo "Usage: tempo [OPTION]"
-            echo "Display time progress bars"
-            echo ""
             echo "Options:"
-            echo "  -d, --day      Show day progress"
-            echo "  -w, --week     Show week progress"
-            echo "  -m, --month    Show month progress"
-            echo "  -y, --year     Show year progress"
-            echo "  -c, --config   Show current configuration"
-            echo "  -h, --help     Show this help message"
-            ;;
-        *)
-            echo "Unknown option: $1. Try 'tempo --help'."
-            return 1
-            ;;
+            echo "  -d, --day      Day progress"
+            echo "  -w, --week     Week progress"
+            echo "  -m, --month    Month progress"
+            echo "  -y, --year     Year progress"
+            echo "  -a, --all      All progress bars"
+            echo "  -c, --config   Show configuration"
+            echo "  -h, --help     Show this help"
+            return ;;
+        "") ;;
+        *) echo "tempo: unknown option '$1'"; return 1 ;;
     esac
+
+    date '+%H %M %S %u %d %j %Y %m' | awk \
+        -v W="$_tw" -v F="$_tf" -v E="$_te" -v C="$_tc" -v items="$_ti" '
+    function bar(v,mx,lb,  p,nf,ne,bf,be,pd,c,r,i) {
+        p=int(v*100/mx); if(p>100)p=100; if(p<0)p=0
+        nf=int(W*p/100); ne=W-nf
+        bf=""; for(i=0;i<nf;i++) bf=bf F
+        be=""; for(i=0;i<ne;i++) be=be E
+        pd=""; for(i=0;i<7-length(lb);i++) pd=pd " "
+        c=""; r=""
+        if(C=="true") {
+            r="\033[0m"
+            if(p>=90) c="\033[31m"; else if(p>=70) c="\033[33m"; else c="\033[34m"
+        }
+        printf "%s%s: [%s%s%s%s] %d%%\n", lb, pd, c, bf, r, be, p
+    }
+    function dim(m,y,  a) {
+        split("31,28,31,30,31,30,31,31,30,31,30,31",a,",")
+        return (m==2 && y%4==0 && (y%100!=0||y%400==0)) ? 29 : a[m]+0
+    }
+    {
+        s=($1+0)*3600+($2+0)*60+($3+0)
+        dw=$4+0; dm=$5+0; dy=$6+0; Y=$7+0; mo=$8+0
+        diy=(Y%4==0 && (Y%100!=0||Y%400==0)) ? 366 : 365
+        n=split(items,it," ")
+        for(i=1;i<=n;i++) {
+            if(it[i]=="day")   bar(s, 86400, "Day")
+            if(it[i]=="week")  bar((dw-1)*86400+s, 604800, "Week")
+            if(it[i]=="month") bar((dm-1)*86400+s, dim(mo,Y)*86400, "Month")
+            if(it[i]=="year")  bar((dy-1)*86400+s, diy*86400, "Year")
+        }
+    }'
 }
