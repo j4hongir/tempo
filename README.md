@@ -14,7 +14,7 @@ Year   : [################..................................] 33%
 ### zsh
 
 <details>
-<summary><strong>Oh My Zsh</strong></summary>
+<summary><strong>oh-my-zsh</strong></summary>
 
 1. clone into your plugins directory:
    ```bash
@@ -89,12 +89,12 @@ customize **tempo** by setting these variables in your shell config (`.zshrc`, `
 
 | variable | default | description |
 | :--- | :--- | :--- |
-| `TEMPO_AUTO_SHOW` | `true` | Show progress bars on shell startup |
-| `TEMPO_SHOW_ITEMS` | `day week month year` | List of items to display |
-| `TEMPO_WIDTH` | `40` | Total width of the progress bar |
-| `TEMPO_FILLED_CHAR` | `█` | Character for the filled portion |
-| `TEMPO_EMPTY_CHAR` | `░` | Character for the empty portion |
-| `TEMPO_COLOR_STYLE` | `true` | Enable progress-based coloring |
+| `TEMPO_AUTO_SHOW` | `true` | show progress bars on shell startup |
+| `TEMPO_SHOW_ITEMS` | `day week month year` | list of items to display |
+| `TEMPO_WIDTH` | `40` | total width of the progress bar |
+| `TEMPO_FILLED_CHAR` | `█` | character for the filled portion |
+| `TEMPO_EMPTY_CHAR` | `░` | character for the empty portion |
+| `TEMPO_COLOR_STYLE` | `true` | enable progress-based coloring |
 
 ### example
 
