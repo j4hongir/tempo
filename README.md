@@ -15,26 +15,34 @@ Year : [#############...........................] 33%
 
 <details>
 <summary><strong>oh-my-zsh</strong></summary>
+
 ```bash
 git clone https://github.com/j4hongir/tempo.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/tempo
 ```
+
 add `tempo` to your plugins in `.zshrc`:
+
 ```zsh
 plugins=(... tempo)
 ```
+
 </details>
 <details>
 <summary><strong>zinit</strong></summary>
+
 ```zsh
 zinit light j4hongir/tempo
 ```
+
 </details>
 <details>
 <summary><strong>manual</strong></summary>
+
 ```bash
 git clone https://github.com/j4hongir/tempo.git ~/tempo 
 echo 'source ~/tempo/tempo.plugin.zsh' >> ~/.zshrc
 ```
+
 </details>
 
 ### bash
